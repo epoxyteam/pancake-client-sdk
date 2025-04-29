@@ -1,6 +1,6 @@
-# API Loyalty
+# API Khách Hàng Thân Thiết (Loyalty)
 
-Module Loyalty cung cấp các phương thức để quản lý chương trình khách hàng thân thiết trong Pancake POS.
+Module Loyalty cung cấp các phương thức để quản lý chương trình khách hàng thân thiết, bao gồm tích điểm, đổi thưởng và phân cấp thành viên trong hệ thống Pancake POS.
 
 ## Khởi Tạo
 
@@ -11,9 +11,9 @@ const client = new PancakeClient('your-api-key', 'your-shop-id');
 const loyaltyApi = client.loyalty;
 ```
 
-## Chương Trình Tích Điểm
+## Quản Lý Chương Trình
 
-### Lấy Thông Tin Chương Trình
+### Xem Chi Tiết Chương Trình
 
 ```typescript
 const program = await client.loyalty.getProgram();
@@ -22,111 +22,82 @@ const program = await client.loyalty.getProgram();
 ### Thiết Lập Chương Trình
 
 ```typescript
-const program = await client.loyalty.setupProgram({
-  name: 'Chương Trình Khách Hàng Thân Thiết',
+const newProgram = await client.loyalty.setupProgram({
+  name: 'Chương trình thành viên',
   points_currency_ratio: 1000, // 1000 VND = 1 điểm
-  min_points_to_redeem: 100,   // Tối thiểu 100 điểm để đổi
-  point_expiry_months: 12      // Điểm hết hạn sau 12 tháng
+  min_points_to_redeem: 100,
+  point_expiry_months: 12
 });
 ```
-
-#### Model CreateLoyaltyProgramRequest
-
-| Tên | Kiểu | Bắt buộc | Mô tả |
-|-----|------|----------|--------|
-| name | string | có | Tên chương trình |
-| points_currency_ratio | number | có | Tỷ lệ tiền/điểm |
-| min_points_to_redeem | number | có | Số điểm tối thiểu để đổi |
-| point_expiry_months | number | không | Thời hạn điểm (tháng) |
 
 ### Cập Nhật Chương Trình
 
 ```typescript
-const updated = await client.loyalty.updateProgram({
-  points_currency_ratio: 2000,
-  min_points_to_redeem: 200
+const updatedProgram = await client.loyalty.updateProgram({
+  points_currency_ratio: 500,
+  min_points_to_redeem: 50
 });
 ```
 
-## Hạng Thành Viên
+## Quản Lý Cấp Độ Thành Viên
 
-### Lấy Danh Sách Hạng
+### Lấy Danh Sách Cấp Độ
 
 ```typescript
 const { data: tiers } = await client.loyalty.listTiers();
 ```
 
-### Tạo Hạng Mới
+### Tạo Cấp Độ Mới
 
 ```typescript
-const tier = await client.loyalty.createTier({
-  name: 'Khách Hàng VIP',
+const newTier = await client.loyalty.createTier({
+  name: 'Hạng Vàng',
   min_points: 1000,
   benefits: [
     {
       type: 'discount_percent',
       value: 10,
-      description: 'Giảm 10% tất cả đơn hàng',
+      description: 'Giảm 10% cho mọi đơn hàng',
       conditions: {
         min_order_value: 500000
       }
     },
     {
       type: 'bonus_points',
-      value: 50,
-      description: 'Tặng 50% điểm thưởng'
+      value: 20,
+      description: 'Tặng thêm 20% điểm thưởng'
     }
   ],
-  color: '#FFD700',
-  icon_url: 'https://example.com/vip-icon.png'
+  color: '#FFD700'
 });
 ```
 
-#### Model LoyaltyBenefit
-
-| Tên | Kiểu | Bắt buộc | Mô tả |
-|-----|------|----------|--------|
-| type | string | có | Loại ưu đãi: 'discount_percent', 'discount_amount', 'free_shipping', 'bonus_points', 'custom' |
-| value | number | có | Giá trị ưu đãi |
-| description | string | không | Mô tả ưu đãi |
-| conditions | object | không | Điều kiện áp dụng |
-
-### Cập Nhật Hạng
+### Cập Nhật Cấp Độ
 
 ```typescript
-const updated = await client.loyalty.updateTier('tier-id', {
-  min_points: 2000,
-  benefits: [/* ... */]
+const updatedTier = await client.loyalty.updateTier('tier-id', {
+  benefits: [
+    {
+      type: 'discount_percent',
+      value: 15,
+      description: 'Giảm 15% cho mọi đơn hàng'
+    }
+  ]
 });
+```
+
+### Xóa Cấp Độ
+
+```typescript
+await client.loyalty.deleteTier('tier-id');
 ```
 
 ## Quản Lý Điểm Thưởng
 
-### Xem Thông Tin Tích Điểm Khách Hàng
+### Xem Thông Tin Tích Lũy
 
 ```typescript
-const loyalty = await client.loyalty.getCustomerLoyalty('customer-id');
-console.log('Tổng điểm:', loyalty.total_points);
-console.log('Hạng hiện tại:', loyalty.tier_info.name);
-```
-
-#### Response: CustomerLoyalty
-
-```typescript
-interface CustomerLoyalty {
-  customer_id: string;
-  total_points: number;        // Tổng điểm hiện có
-  tier_id: string;            // ID hạng thành viên
-  tier_info: LoyaltyTier;     // Thông tin hạng
-  points_history: {
-    valid_points: number;      // Điểm có thể sử dụng
-    expiring_points: number;   // Điểm sắp hết hạn
-    next_expiry_date?: string; // Ngày hết hạn tiếp theo
-    next_expiry_points?: number; // Số điểm sẽ hết hạn
-  };
-  lifetime_points: number;     // Tổng điểm tích lũy
-  year_to_date_points: number; // Điểm tích lũy trong năm
-}
+const customerLoyalty = await client.loyalty.getCustomerLoyalty('customer-id');
 ```
 
 ### Điều Chỉnh Điểm
@@ -134,13 +105,13 @@ interface CustomerLoyalty {
 ```typescript
 const adjustment = await client.loyalty.adjustPoints({
   customer_id: 'customer-id',
-  points: 100,      // Số dương: cộng điểm, số âm: trừ điểm
-  reason: 'Điều chỉnh thủ công',
-  expiry_date: '2025-12-31'
+  points: 100,
+  reason: 'Điểm thưởng sinh nhật',
+  expiry_date: '2025-04-29'
 });
 ```
 
-### Đổi Điểm
+### Đổi Điểm Thưởng
 
 ```typescript
 const redemption = await client.loyalty.redeemPoints({
@@ -150,38 +121,142 @@ const redemption = await client.loyalty.redeemPoints({
 });
 ```
 
-### Tính Điểm Cho Đơn Hàng
+### Tính Toán Điểm Cho Đơn Hàng
 
 ```typescript
 const calculation = await client.loyalty.calculateOrderPoints('order-id');
-console.log('Điểm cơ bản:', calculation.breakdown.base_points);
-console.log('Điểm thưởng hạng:', calculation.breakdown.tier_bonus);
-console.log('Tổng điểm:', calculation.points);
+console.log(`
+  Điểm cơ bản: ${calculation.breakdown.base_points}
+  Điểm thưởng hạng: ${calculation.breakdown.tier_bonus || 0}
+  Điểm thưởng khuyến mãi: ${calculation.breakdown.promotion_bonus || 0}
+  Tổng điểm: ${calculation.points}
+`);
 ```
 
-### Xem Lịch Sử Giao Dịch Điểm
+## Quản Lý Giao Dịch
+
+### Lấy Danh Sách Giao Dịch
 
 ```typescript
 const { data: transactions } = await client.loyalty.listTransactions({
-  customer_id: 'customer-id',
+  page_size: 20,
+  page_number: 1,
   type: 'earn',
-  from_date: '2025-01-01',
-  to_date: '2025-12-31'
+  from_date: '2024-04-01',
+  to_date: '2024-04-30'
 });
 ```
 
-## Phân Tích & Báo Cáo
+### Lấy Giao Dịch Của Khách Hàng
 
-### Thống Kê Chương Trình
+```typescript
+const { data: customerTransactions } = await client.loyalty.getCustomerTransactions('customer-id', {
+  from_date: '2024-04-01',
+  to_date: '2024-04-30'
+});
+```
+
+## Phân Tích Và Thống Kê
+
+### Lấy Số Liệu Phân Tích
 
 ```typescript
 const analytics = await client.loyalty.getAnalytics({
-  from_date: '2025-01-01',
-  to_date: '2025-12-31'
+  from_date: '2024-04-01',
+  to_date: '2024-04-30'
 });
 ```
 
-#### Response: LoyaltyAnalytics
+### Kiểm Tra Điểm Sắp Hết Hạn
+
+```typescript
+const expiringPoints = await client.loyalty.getExpiringPoints({
+  days_threshold: 30,
+  min_points: 100
+});
+```
+
+## Models
+
+### LoyaltyProgram
+
+```typescript
+interface LoyaltyProgram {
+  id: string;
+  name: string;
+  is_active: boolean;
+  points_currency_ratio: number;  // VD: 1000 VND = 1 điểm
+  min_points_to_redeem: number;
+  point_expiry_months?: number;
+  created_at: string;
+  updated_at: string;
+}
+```
+
+### LoyaltyTier
+
+```typescript
+interface LoyaltyTier {
+  id: string;
+  name: string;
+  min_points: number;
+  benefits: LoyaltyBenefit[];
+  color?: string;
+  icon_url?: string;
+}
+
+interface LoyaltyBenefit {
+  type: 'discount_percent' | 'discount_amount' | 'free_shipping' | 'bonus_points' | 'custom';
+  value: number;
+  description?: string;
+  conditions?: {
+    min_order_value?: number;
+    max_discount_value?: number;
+    product_ids?: string[];
+    category_ids?: number[];
+  };
+}
+```
+
+### CustomerLoyalty
+
+```typescript
+interface CustomerLoyalty {
+  customer_id: string;
+  total_points: number;
+  tier_id: string;
+  tier_info: LoyaltyTier;
+  points_history: {
+    valid_points: number;
+    expiring_points: number;
+    next_expiry_date?: string;
+    next_expiry_points?: number;
+  };
+  lifetime_points: number;
+  year_to_date_points: number;
+}
+```
+
+### LoyaltyTransaction
+
+```typescript
+interface LoyaltyTransaction {
+  id: string;
+  customer_id: string;
+  type: 'earn' | 'redeem' | 'expire' | 'adjust';
+  points: number;
+  order_id?: string;
+  reason?: string;
+  expiry_date?: string;
+  created_at: string;
+  created_by?: {
+    id: string;
+    name: string;
+  };
+}
+```
+
+### LoyaltyAnalytics
 
 ```typescript
 interface LoyaltyAnalytics {
@@ -192,103 +267,119 @@ interface LoyaltyAnalytics {
     total_points_expired: number;
     total_active_points: number;
   };
-  tier_distribution: Array<{
+  tier_distribution: {
     tier_id: string;
     tier_name: string;
     member_count: number;
-  }>;
-  monthly_activity: Array<{
+  }[];
+  monthly_activity: {
     month: string;
     points_earned: number;
     points_redeemed: number;
     new_members: number;
-  }>;
+  }[];
 }
 ```
 
-### Điểm Sắp Hết Hạn
+## Ví Dụ Sử Dụng
+
+### Thiết Lập Chương Trình Khách Hàng Thân Thiết
 
 ```typescript
-const expiring = await client.loyalty.getExpiringPoints({
-  days_threshold: 30,  // Cảnh báo trước 30 ngày
-  min_points: 100     // Chỉ cảnh báo nếu từ 100 điểm
-});
-```
-
-## Ví Dụ Tích Hợp
-
-### Xử Lý Tích Điểm Tự Động
-
-```typescript
-async function handleOrderCompletion(orderId: string, customerId: string) {
+async function setupLoyaltyProgram() {
   try {
-    // Tính điểm cho đơn hàng
-    const { points, breakdown } = await client.loyalty.calculateOrderPoints(orderId);
-
-    // Cộng điểm cho khách hàng
-    const transaction = await client.loyalty.adjustPoints({
-      customer_id: customerId,
-      points: points,
-      reason: `Tích điểm đơn hàng #${orderId}`,
-      expiry_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+    // Tạo chương trình tích điểm
+    const program = await client.loyalty.setupProgram({
+      name: 'Chương trình thành viên XYZ',
+      points_currency_ratio: 1000,
+      min_points_to_redeem: 100,
+      point_expiry_months: 12
     });
 
-    // Kiểm tra và cập nhật hạng thành viên
-    const loyalty = await client.loyalty.getCustomerLoyalty(customerId);
-    
-    console.log('Điểm tích lũy:', points);
-    console.log('Tổng điểm hiện tại:', loyalty.total_points);
-    console.log('Hạng thành viên:', loyalty.tier_info.name);
+    // Tạo các cấp độ thành viên
+    const silverTier = await client.loyalty.createTier({
+      name: 'Hạng Bạc',
+      min_points: 1000,
+      benefits: [
+        {
+          type: 'discount_percent',
+          value: 5,
+          description: 'Giảm 5% mọi đơn hàng'
+        },
+        {
+          type: 'bonus_points',
+          value: 10,
+          description: 'Tặng thêm 10% điểm thưởng'
+        }
+      ]
+    });
 
-    return transaction;
+    const goldTier = await client.loyalty.createTier({
+      name: 'Hạng Vàng',
+      min_points: 5000,
+      benefits: [
+        {
+          type: 'discount_percent',
+          value: 10,
+          description: 'Giảm 10% mọi đơn hàng'
+        },
+        {
+          type: 'bonus_points',
+          value: 20,
+          description: 'Tặng thêm 20% điểm thưởng'
+        },
+        {
+          type: 'free_shipping',
+          value: 0,
+          description: 'Miễn phí vận chuyển',
+          conditions: {
+            min_order_value: 500000
+          }
+        }
+      ]
+    });
+
+    console.log('Đã thiết lập chương trình thành công!');
   } catch (error) {
-    console.error('Lỗi xử lý tích điểm:', error);
-    throw error;
+    console.error('Lỗi khi thiết lập chương trình:', error);
   }
 }
 ```
 
-### Gửi Thông Báo Điểm Sắp Hết Hạn
+### Quản Lý Điểm Sắp Hết Hạn
 
 ```typescript
-async function notifyExpiringPoints() {
+async function handleExpiringPoints() {
   try {
-    // Lấy danh sách điểm sắp hết hạn trong 30 ngày
+    // Kiểm tra điểm sắp hết hạn trong 30 ngày tới
     const { customers } = await client.loyalty.getExpiringPoints({
       days_threshold: 30,
       min_points: 100
     });
 
-    // Xử lý thông báo cho từng khách hàng
     for (const customer of customers) {
-      const loyalty = await client.loyalty.getCustomerLoyalty(customer.customer_id);
-      
-      // Tính toán ưu đãi có thể đổi
-      const availableRewards = calculateAvailableRewards(
-        customer.expiring_points,
-        loyalty.tier_info.benefits
-      );
-
-      // Gửi thông báo (triển khai riêng)
-      await sendNotification({
-        customer_id: customer.customer_id,
-        points: customer.expiring_points,
-        expiry_date: customer.expiry_date,
-        available_rewards: availableRewards
-      });
+      // Tự động gửi thông báo hoặc tạo chiến dịch khuyến khích sử dụng điểm
+      console.log(`
+        Khách hàng: ${customer.customer_id}
+        Điểm sắp hết hạn: ${customer.expiring_points}
+        Ngày hết hạn: ${customer.expiry_date}
+      `);
     }
+
+    // Phân tích tỷ lệ sử dụng điểm
+    const analytics = await client.loyalty.getAnalytics({
+      from_date: '2024-04-01',
+      to_date: '2024-04-30'
+    });
+
+    const redemptionRate = (
+      analytics.points_statistics.total_points_redeemed /
+      analytics.points_statistics.total_points_issued
+    ) * 100;
+
+    console.log(`Tỷ lệ sử dụng điểm: ${redemptionRate.toFixed(2)}%`);
+
   } catch (error) {
-    console.error('Lỗi xử lý thông báo điểm hết hạn:', error);
-    throw error;
+    console.error('Lỗi khi xử lý điểm hết hạn:', error);
   }
-}
-
-function calculateAvailableRewards(points: number, benefits: LoyaltyBenefit[]) {
-  // Logic tính toán ưu đãi có thể đổi với số điểm sắp hết hạn
-  return benefits.filter(benefit => {
-    if (benefit.type === 'discount_amount') {
-      return points >= benefit.value;
-    }
-    return true;
-  });
 }

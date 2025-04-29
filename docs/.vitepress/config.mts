@@ -43,18 +43,37 @@ export default defineConfig({
             { text: "Reports", link: "/api/reports" },
             { text: "Payments", link: "/api/payments" },
             { text: "Warehouses", link: "/api/warehouses" },
-            { text: "Loyalty", link: "/api/loyalty" },
           ],
         },
         {
-          text: "Advanced Features",
+          text: "Financial Management",
           items: [
-            {
-              text: "Marketplace",
-              link: "/api/orders#marketplace-integration",
-            },
-            { text: "Payments", link: "/api/orders#payment-processing" },
-            { text: "Inventory", link: "/api/orders#inventory-management" },
+            { text: "Finance", link: "/api/finance" },
+            { text: "E-Invoice", link: "/api/einvoice" },
+            { text: "Measurement", link: "/api/measurement" },
+          ],
+        },
+        {
+          text: "Customer Engagement",
+          items: [
+            { text: "Loyalty", link: "/api/loyalty" },
+            { text: "Reviews", link: "/api/reviews" },
+          ],
+        },
+        {
+          text: "Asset Management",
+          items: [
+            { text: "Media", link: "/api/media" },
+            { text: "Return", link: "/api/return" },
+          ],
+        },
+        {
+          text: "System Management",
+          items: [
+            { text: "Staff", link: "/api/staff" },
+            { text: "Settings", link: "/api/settings" },
+            { text: "Webhooks", link: "/api/webhooks" },
+            { text: "Shop", link: "/api/shop" },
           ],
         },
       ],
