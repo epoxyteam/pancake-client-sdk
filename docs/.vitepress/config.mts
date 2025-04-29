@@ -35,45 +35,51 @@ export default defineConfig({
       ],
       "/api/": [
         {
-          text: "Core Resources",
+          text: "Giới Thiệu",
           items: [
-            { text: "Orders", link: "/api/orders" },
-            { text: "Products", link: "/api/products" },
-            { text: "Customers", link: "/api/customers" },
-            { text: "Reports", link: "/api/reports" },
-            { text: "Payments", link: "/api/payments" },
-            { text: "Warehouses", link: "/api/warehouses" },
+            { text: "Bắt Đầu Sử Dụng", link: "/api/" },
           ],
         },
         {
-          text: "Financial Management",
+          text: "Tài Nguyên Cơ Bản",
           items: [
-            { text: "Finance", link: "/api/finance" },
-            { text: "E-Invoice", link: "/api/einvoice" },
-            { text: "Measurement", link: "/api/measurement" },
+            { text: "Đơn Hàng", link: "/api/orders" },
+            { text: "Sản Phẩm", link: "/api/products" },
+            { text: "Khách Hàng", link: "/api/customers" },
+            { text: "Báo Cáo", link: "/api/reports" },
+            { text: "Thanh Toán", link: "/api/payments" },
+            { text: "Kho Hàng", link: "/api/warehouses" },
           ],
         },
         {
-          text: "Customer Engagement",
+          text: "Quản Lý Tài Chính",
           items: [
-            { text: "Loyalty", link: "/api/loyalty" },
-            { text: "Reviews", link: "/api/reviews" },
+            { text: "Tài Chính", link: "/api/finance" },
+            { text: "Hóa Đơn Điện Tử", link: "/api/einvoice" },
+            { text: "Đơn Vị Đo Lường", link: "/api/measurement" },
           ],
         },
         {
-          text: "Asset Management",
+          text: "Tương Tác Khách Hàng",
           items: [
-            { text: "Media", link: "/api/media" },
-            { text: "Return", link: "/api/return" },
+            { text: "Khách Hàng Thân Thiết", link: "/api/loyalty" },
+            { text: "Đánh Giá", link: "/api/reviews" },
           ],
         },
         {
-          text: "System Management",
+          text: "Quản Lý Tài Sản",
           items: [
-            { text: "Staff", link: "/api/staff" },
-            { text: "Settings", link: "/api/settings" },
-            { text: "Webhooks", link: "/api/webhooks" },
-            { text: "Shop", link: "/api/shop" },
+            { text: "Tệp Tin & Hình Ảnh", link: "/api/media" },
+            { text: "Trả Hàng", link: "/api/return" },
+          ],
+        },
+        {
+          text: "Quản Lý Hệ Thống",
+          items: [
+            { text: "Nhân Viên", link: "/api/staff" },
+            { text: "Cài Đặt", link: "/api/settings" },
+            { text: "Webhook", link: "/api/webhooks" },
+            { text: "Cửa Hàng", link: "/api/shop" },
           ],
         },
       ],
