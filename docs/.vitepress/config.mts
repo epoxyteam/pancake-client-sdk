@@ -2,9 +2,12 @@ import { defineConfig } from "vitepress";
 
 export default defineConfig({
   base: "/pancake-client-sdk/",
-  title: "Pancake POS SDK",
-  description: "Tài liệu hướng dẫn chính thức cho Pancake POS SDK",
+  title: "Pancake Client SDK",
+  description: "Tài liệu hướng dẫn chính thức cho Pancake POS API",
   lang: "vi-VN",
+  vite: {
+    publicDir: "public",
+  },
   themeConfig: {
     nav: [
       { text: "Trang Chủ", link: "/" },
@@ -35,8 +38,12 @@ export default defineConfig({
           text: "Core Resources",
           items: [
             { text: "Orders", link: "/api/orders" },
-            { text: "Products", link: "/api/orders#products" },
-            { text: "Customers", link: "/api/orders#customers" },
+            { text: "Products", link: "/api/products" },
+            { text: "Customers", link: "/api/customers" },
+            { text: "Reports", link: "/api/reports" },
+            { text: "Payments", link: "/api/payments" },
+            { text: "Warehouses", link: "/api/warehouses" },
+            { text: "Loyalty", link: "/api/loyalty" },
           ],
         },
         {

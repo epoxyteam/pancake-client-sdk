@@ -2,7 +2,7 @@
 
 ## Giới Thiệu
 
-Pancake POS SDK là thư viện TypeScript chính thức để tương tác với Pancake POS API. SDK được thiết kế để:
+Pancake Client SDK là thư viện TypeScript chính thức để tương tác với Pancake POS API. SDK được thiết kế để:
 - Cung cấp interface type-safe đầy đủ
 - Đơn giản hóa việc tích hợp với Pancake POS
 - Hỗ trợ đầy đủ các tính năng của API

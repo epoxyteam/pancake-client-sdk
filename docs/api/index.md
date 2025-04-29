@@ -149,5 +149,5 @@ API có giới hạn số lượng request trong một khoảng thời gian. SDK
 
 Nếu bạn cần hỗ trợ:
 - [Issues](https://github.com/epoxyteam/pancake-client-sdk/issues)
-- [Documentation](https://docs.pancakepos.com)
-- Email: support@pancakepos.com
+- [Documentation](https://api-docs.pancake.vn)
+- Email: huyphongbn24@gmail.com
