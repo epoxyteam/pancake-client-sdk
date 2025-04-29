@@ -1,24 +1,24 @@
 # Pancake POS SDK
 
-Official TypeScript SDK for the Pancake POS API. This SDK provides a simple and type-safe way to interact with the Pancake POS platform.
+SDK TypeScript chính thức cho Pancake POS API. Thư viện này cung cấp cách đơn giản và type-safe để tương tác với nền tảng Pancake POS.
 
-## Installation
+## Cài Đặt
 
 ```bash
 npm install pancake-client-sdk
-# or
+# hoặc
 yarn add pancake-client-sdk
 ```
 
-## Quick Start
+## Bắt Đầu Nhanh
 
 ```typescript
 import { PancakeClient } from 'pancake-client-sdk';
 
-// Initialize the client with shop ID
+// Khởi tạo client với shop ID
 const client = new PancakeClient('your-api-key', 'your-shop-id');
 
-// Example: Get list of orders
+// Ví dụ: Lấy danh sách đơn hàng
 const getOrders = async () => {
   const orders = await client.orders.list({
     page_size: 10,
@@ -27,7 +27,7 @@ const getOrders = async () => {
   console.log(orders);
 };
 
-// Example: Create a product
+// Ví dụ: Tạo sản phẩm mới
 const createProduct = async () => {
   const product = await client.products.create({
     name: 'Test Product',
@@ -38,174 +38,43 @@ const createProduct = async () => {
 };
 ```
 
-## Features
+## Tính Năng Chính
 
-- Full TypeScript support with complete type definitions
-- Comprehensive coverage of all Pancake POS API endpoints
-- Built-in request/response typing
-- Automatic error handling
-- Clean and intuitive API interface
+- Hỗ trợ TypeScript đầy đủ với định nghĩa types
+- Bao phủ toàn bộ các endpoint của Pancake POS API
+- Tích hợp typing cho request/response
+- Xử lý lỗi tự động
+- Giao diện API trực quan và dễ sử dụng
 
-## Available Resources
+## Các Resource Có Sẵn
 
-- Customers & CRM
-- Orders & Returns
-- Products & Inventory 
-- Warehouses & Logistics
-- Promotions & Loyalty
-- Payments & Finance
-- Staff & Permissions
+- Khách hàng & CRM
+- Đơn hàng & Trả hàng
+- Sản phẩm & Kho hàng
+- Kho vận & Logistics
+- Khuyến mãi & Tích điểm
+- Thanh toán & Tài chính
+- Nhân viên & Phân quyền
 - Media & Files
-- Reports & Analytics
-- Settings & Preferences
-- And more...
+- Báo cáo & Phân tích
+- Cài đặt & Tùy chỉnh
 
-## Error Handling
+## Xử Lý Lỗi
 
-The SDK throws typed errors that you can catch and handle:
+SDK ném ra các lỗi có type định nghĩa sẵn:
 
 ```typescript
 try {
   const order = await client.orders.getById('order-id');
 } catch (error) {
   if (error.status === 404) {
-    console.log('Order not found');
+    console.log('Không tìm thấy đơn hàng');
   } else {
-    console.error('Something went wrong:', error);
+    console.error('Đã xảy ra lỗi:', error);
   }
 }
 ```
 
-## Resource Examples
+## Giấy Phép
 
-### Orders
-
-```typescript
-// List orders
-const orders = await client.orders.list({
-  status: 'pending',
-  from_date: '2025-01-01'
-});
-
-// Get order details
-const order = await client.orders.getById('order-id');
-
-// Create order
-const newOrder = await client.orders.create({
-  customer_id: 'customer-id',
-  items: [{
-    product_id: 'product-id',
-    quantity: 1
-  }]
-});
-```
-
-### Products
-
-```typescript
-// List products
-const products = await client.products.list();
-
-// Create product
-const product = await client.products.create({
-  name: 'New Product',
-  price: 100
-});
-
-// Update product
-await client.products.update('product-id', {
-  price: 120
-});
-```
-
-### Customers
-
-```typescript
-// List customers
-const customers = await client.customers.list();
-
-// Get customer details
-const customer = await client.customers.getById('customer-id');
-
-// Create customer
-const newCustomer = await client.customers.create({
-  name: 'John Doe',
-  email: 'john@example.com'
-});
-```
-
-## Advanced Usage
-
-### Marketplace Integration
-
-```typescript
-// Connect marketplace account
-const account = await client.marketplace.connect({
-  platform: 'shopee',
-  auth_code: 'auth-code'
-});
-
-// Sync orders
-await client.marketplace.startSync(account.id, 'orders');
-```
-
-### Payment Processing
-
-```typescript
-// Create payment
-const payment = await client.payments.createPayment({
-  order_id: 'order-id',
-  amount: 100,
-  currency: 'USD',
-  gateway_code: 'stripe'
-});
-```
-
-### File Management
-
-```typescript
-// Upload file
-const media = await client.media.upload({
-  file: fileBlob,
-  folder_id: 'folder-id'
-});
-
-// Process image
-await client.media.processImage(media.id, {
-  width: 800,
-  height: 600,
-  format: 'webp'
-});
-```
-
-## Documentation
-
-### Local Development Documentation
-
-Để chạy documentation trên môi trường local:
-
-```bash
-# Cài đặt dependencies
-npm install
-
-# Chạy documentation server
-npm run docs:dev
-```
-
-Documentation server sẽ chạy tại http://localhost:5173
-
-### Cấu Trúc Documentation
-
-- `/docs/guide/` - Hướng dẫn sử dụng cơ bản
-- `/docs/api/` - Chi tiết API reference
-- `/docs/examples/` - Các ví dụ tích hợp
-
-Để build documentation cho production:
-
-```bash
-npm run docs:build
-```
-
-## License
-
-MIT License - see LICENSE file for details
+MIT License - Xem [LICENSE](LICENSE) để biết thêm chi tiết.
