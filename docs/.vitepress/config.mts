@@ -1,7 +1,7 @@
 import { defineConfig } from "vitepress";
 
 export default defineConfig({
-  base: "/epoxyteam/pancake-client-sdk",
+  base: "/pancake-client-sdk/",
   title: "Pancake POS SDK",
   description: "Tài liệu hướng dẫn chính thức cho Pancake POS SDK",
   lang: "vi-VN",
