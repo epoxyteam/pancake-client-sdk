@@ -1,6 +1,6 @@
 {
   "name": "pancake-client-sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Official TypeScript SDK for Pancake POS API",
   "type": "module",
   "main": "dist/index.js",
@@ -15,8 +15,7 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs",
-    "prepack": "npm run build"
+    "docs:preview": "vitepress preview docs"
   },
   "files": [
     "dist",
@@ -31,7 +30,10 @@
     "typescript",
     "ecommerce"
   ],
-  "author": "Phong H.",
+  "author": {
+    "name": "Phong H.",
+    "email": "huyphongbn24@gmail.com"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -40,7 +42,7 @@
   "bugs": {
     "url": "https://github.com/epoxyteam/pancake-client-sdk/issues"
   },
-  "homepage": "https://github.com/epoxyteam/pancake-client-sdk#readme",
+  "homepage": "https://epoxyteam.github.io/pancake-client-sdk",
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
