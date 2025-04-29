@@ -5,6 +5,9 @@ export default defineConfig({
   title: "Pancake Client SDK",
   description: "Tài liệu hướng dẫn chính thức cho Pancake POS API",
   lang: "vi-VN",
+  head: [
+    ['link', { rel: 'icon', type: 'image/png', href: 'https://avatars.githubusercontent.com/u/129583893' }]
+  ],
   vite: {
     publicDir: "public",
   },
