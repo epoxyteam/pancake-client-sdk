@@ -15,43 +15,42 @@ export class MarketplaceResource extends BaseResource {
   /**
    * Get list of connected marketplace accounts
    */
-  async listAccounts(shopId: string): Promise<{
+  async listAccounts(): Promise<{
     data: MarketplaceAccount[];
   }> {
-    return this.client.get(`/shops/${shopId}/marketplace/accounts`);
+    return this.client.get(this.getShopPath('/marketplace/accounts'));
   }
 
   /**
    * Get marketplace account by ID
    */
-  async getAccount(shopId: string, accountId: string): Promise<MarketplaceAccount> {
-    return this.client.get(`/shops/${shopId}/marketplace/accounts/${accountId}`);
+  async getAccount(accountId: string): Promise<MarketplaceAccount> {
+    return this.client.get(this.getShopPath(`/marketplace/accounts/${accountId}`));
   }
 
   /**
    * Connect new marketplace account
    */
-  async connect(shopId: string, data: ConnectAccountRequest): Promise<MarketplaceAccount> {
-    return this.client.post(`/shops/${shopId}/marketplace/accounts`, data);
+  async connect(data: ConnectAccountRequest): Promise<MarketplaceAccount> {
+    return this.client.post(this.getShopPath('/marketplace/accounts'), data);
   }
 
   /**
    * Disconnect marketplace account
    */
-  async disconnect(shopId: string, accountId: string): Promise<void> {
-    return this.client.delete(`/shops/${shopId}/marketplace/accounts/${accountId}`);
+  async disconnect(accountId: string): Promise<void> {
+    return this.client.delete(this.getShopPath(`/marketplace/accounts/${accountId}`));
   }
 
   /**
    * Update marketplace settings
    */
   async updateSettings(
-    shopId: string,
     accountId: string,
     settings: Partial<MarketplaceSettings>
   ): Promise<MarketplaceAccount> {
     return this.client.put(
-      `/shops/${shopId}/marketplace/accounts/${accountId}/settings`,
+      this.getShopPath(`/marketplace/accounts/${accountId}/settings`),
       settings
     );
   }
@@ -60,7 +59,6 @@ export class MarketplaceResource extends BaseResource {
    * Start sync process
    */
   async startSync(
-    shopId: string,
     accountId: string,
     type: string,
     params?: {
@@ -72,7 +70,7 @@ export class MarketplaceResource extends BaseResource {
     }
   ): Promise<SyncStatus> {
     return this.client.post(
-      `/shops/${shopId}/marketplace/accounts/${accountId}/sync`,
+      this.getShopPath(`/marketplace/accounts/${accountId}/sync`),
       { type, ...params }
     );
   }
@@ -80,14 +78,14 @@ export class MarketplaceResource extends BaseResource {
   /**
    * Get sync status
    */
-  async getSyncStatus(shopId: string, syncId: string): Promise<SyncStatus> {
-    return this.client.get(`/shops/${shopId}/marketplace/sync/${syncId}`);
+  async getSyncStatus(syncId: string): Promise<SyncStatus> {
+    return this.client.get(this.getShopPath(`/marketplace/sync/${syncId}`));
   }
 
   /**
    * List marketplace products
    */
-  async listProducts(shopId: string, accountId: string, params?: {
+  async listProducts(accountId: string, params?: {
     page_size?: number;
     page_number?: number;
     status?: string;
@@ -96,7 +94,7 @@ export class MarketplaceResource extends BaseResource {
     data: MarketplaceProduct[];
   }> {
     return this.client.get(
-      `/shops/${shopId}/marketplace/accounts/${accountId}/products`,
+      this.getShopPath(`/marketplace/accounts/${accountId}/products`),
       params
     );
   }
@@ -105,7 +103,6 @@ export class MarketplaceResource extends BaseResource {
    * Update marketplace product
    */
   async updateProduct(
-    shopId: string,
     accountId: string,
     platformProductId: string,
     data: {
@@ -119,7 +116,7 @@ export class MarketplaceResource extends BaseResource {
     }
   ): Promise<MarketplaceProduct> {
     return this.client.put(
-      `/shops/${shopId}/marketplace/accounts/${accountId}/products/${platformProductId}`,
+      this.getShopPath(`/marketplace/accounts/${accountId}/products/${platformProductId}`),
       data
     );
   }
@@ -127,7 +124,7 @@ export class MarketplaceResource extends BaseResource {
   /**
    * List marketplace orders
    */
-  async listOrders(shopId: string, accountId: string, params?: {
+  async listOrders(accountId: string, params?: {
     page_size?: number;
     page_number?: number;
     status?: string;
@@ -137,7 +134,7 @@ export class MarketplaceResource extends BaseResource {
     data: MarketplaceOrder[];
   }> {
     return this.client.get(
-      `/shops/${shopId}/marketplace/accounts/${accountId}/orders`,
+      this.getShopPath(`/marketplace/accounts/${accountId}/orders`),
       params
     );
   }
@@ -145,9 +142,9 @@ export class MarketplaceResource extends BaseResource {
   /**
    * Get logistics settings
    */
-  async getLogistics(shopId: string, accountId: string): Promise<MarketplaceLogistics> {
+  async getLogistics(accountId: string): Promise<MarketplaceLogistics> {
     return this.client.get(
-      `/shops/${shopId}/marketplace/accounts/${accountId}/logistics`
+      this.getShopPath(`/marketplace/accounts/${accountId}/logistics`)
     );
   }
 
@@ -155,7 +152,6 @@ export class MarketplaceResource extends BaseResource {
    * Update logistics settings
    */
   async updateLogistics(
-    shopId: string,
     accountId: string,
     data: {
       shipping_providers: {
@@ -166,7 +162,7 @@ export class MarketplaceResource extends BaseResource {
     }
   ): Promise<MarketplaceLogistics> {
     return this.client.put(
-      `/shops/${shopId}/marketplace/accounts/${accountId}/logistics`,
+      this.getShopPath(`/marketplace/accounts/${accountId}/logistics`),
       data
     );
   }
@@ -175,7 +171,6 @@ export class MarketplaceResource extends BaseResource {
    * Get platform categories
    */
   async getCategories(
-    shopId: string,
     platform: string,
     params?: {
       parent_id?: string;
@@ -185,7 +180,7 @@ export class MarketplaceResource extends BaseResource {
     data: PlatformCategory[];
   }> {
     return this.client.get(
-      `/shops/${shopId}/marketplace/${platform}/categories`,
+      this.getShopPath(`/marketplace/${platform}/categories`),
       params
     );
   }
@@ -193,19 +188,18 @@ export class MarketplaceResource extends BaseResource {
   /**
    * Get marketplace statistics
    */
-  async getStats(shopId: string, params?: {
+  async getStats(params?: {
     from_date?: string;
     to_date?: string;
     platform?: string;
   }): Promise<MarketplaceStats> {
-    return this.client.get(`/shops/${shopId}/marketplace/stats`, params);
+    return this.client.get(this.getShopPath('/marketplace/stats'), params);
   }
 
   /**
    * Map local product to marketplace
    */
   async mapProduct(
-    shopId: string,
     accountId: string,
     data: {
       product_id: string;
@@ -217,7 +211,7 @@ export class MarketplaceResource extends BaseResource {
     }
   ): Promise<void> {
     return this.client.post(
-      `/shops/${shopId}/marketplace/accounts/${accountId}/map-product`,
+      this.getShopPath(`/marketplace/accounts/${accountId}/map-product`),
       data
     );
   }
@@ -225,10 +219,10 @@ export class MarketplaceResource extends BaseResource {
   /**
    * Get OAuth authorization URL
    */
-  async getAuthUrl(shopId: string, platform: string): Promise<{
+  async getAuthUrl(platform: string): Promise<{
     auth_url: string;
     state: string;
   }> {
-    return this.client.get(`/shops/${shopId}/marketplace/${platform}/auth-url`);
+    return this.client.get(this.getShopPath(`/marketplace/${platform}/auth-url`));
   }
 }

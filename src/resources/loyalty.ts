@@ -16,95 +16,95 @@ export class LoyaltyResource extends BaseResource {
   /**
    * Get loyalty program details
    */
-  async getProgram(shopId: string): Promise<LoyaltyProgram> {
-    return this.client.get(`/shops/${shopId}/loyalty/program`);
+  async getProgram(): Promise<LoyaltyProgram> {
+    return this.client.get(this.getShopPath('/loyalty/program'));
   }
 
   /**
    * Create or update loyalty program
    */
-  async setupProgram(shopId: string, data: CreateLoyaltyProgramRequest): Promise<LoyaltyProgram> {
-    return this.client.post(`/shops/${shopId}/loyalty/program`, data);
+  async setupProgram(data: CreateLoyaltyProgramRequest): Promise<LoyaltyProgram> {
+    return this.client.post(this.getShopPath('/loyalty/program'), data);
   }
 
   /**
    * Update loyalty program
    */
-  async updateProgram(shopId: string, data: Partial<LoyaltyProgram>): Promise<LoyaltyProgram> {
-    return this.client.put(`/shops/${shopId}/loyalty/program`, data);
+  async updateProgram(data: Partial<LoyaltyProgram>): Promise<LoyaltyProgram> {
+    return this.client.put(this.getShopPath('/loyalty/program'), data);
   }
 
   /**
    * Get list of loyalty tiers
    */
-  async listTiers(shopId: string): Promise<{ data: LoyaltyTier[] }> {
-    return this.client.get(`/shops/${shopId}/loyalty/tiers`);
+  async listTiers(): Promise<{ data: LoyaltyTier[] }> {
+    return this.client.get(this.getShopPath('/loyalty/tiers'));
   }
 
   /**
    * Create loyalty tier
    */
-  async createTier(shopId: string, data: CreateLoyaltyTierRequest): Promise<LoyaltyTier> {
-    return this.client.post(`/shops/${shopId}/loyalty/tiers`, data);
+  async createTier(data: CreateLoyaltyTierRequest): Promise<LoyaltyTier> {
+    return this.client.post(this.getShopPath('/loyalty/tiers'), data);
   }
 
   /**
    * Update loyalty tier
    */
-  async updateTier(shopId: string, tierId: string, data: Partial<LoyaltyTier>): Promise<LoyaltyTier> {
-    return this.client.put(`/shops/${shopId}/loyalty/tiers/${tierId}`, data);
+  async updateTier(tierId: string, data: Partial<LoyaltyTier>): Promise<LoyaltyTier> {
+    return this.client.put(this.getShopPath(`/loyalty/tiers/${tierId}`), data);
   }
 
   /**
    * Delete loyalty tier
    */
-  async deleteTier(shopId: string, tierId: string): Promise<void> {
-    return this.client.delete(`/shops/${shopId}/loyalty/tiers/${tierId}`);
+  async deleteTier(tierId: string): Promise<void> {
+    return this.client.delete(this.getShopPath(`/loyalty/tiers/${tierId}`));
   }
 
   /**
    * Get customer loyalty information
    */
-  async getCustomerLoyalty(shopId: string, customerId: string): Promise<CustomerLoyalty> {
-    return this.client.get(`/shops/${shopId}/customers/${customerId}/loyalty`);
+  async getCustomerLoyalty(customerId: string): Promise<CustomerLoyalty> {
+    return this.client.get(this.getShopPath(`/customers/${customerId}/loyalty`));
   }
 
   /**
    * List loyalty transactions
    */
-  async listTransactions(shopId: string, params?: LoyaltyTransactionListParams): Promise<{ 
-    data: LoyaltyTransaction[] 
+  async listTransactions(params?: LoyaltyTransactionListParams): Promise<{
+    data: LoyaltyTransaction[]
   }> {
-    return this.client.get(`/shops/${shopId}/loyalty/transactions`, params);
+    return this.client.get(this.getShopPath('/loyalty/transactions'), params);
   }
 
   /**
    * Get customer loyalty transactions
    */
-  async getCustomerTransactions(shopId: string, customerId: string, params?: Omit<LoyaltyTransactionListParams, 'customer_id'>): Promise<{ 
-    data: LoyaltyTransaction[] 
+  async getCustomerTransactions(customerId: string, params?: Omit<LoyaltyTransactionListParams, 'customer_id'>): Promise<{
+    data: LoyaltyTransaction[]
   }> {
-    return this.client.get(`/shops/${shopId}/customers/${customerId}/loyalty/transactions`, params);
+    return this.client.get(this.getShopPath(`/customers/${customerId}/loyalty/transactions`), params);
   }
 
   /**
    * Adjust customer points
    */
-  async adjustPoints(shopId: string, data: AdjustPointsRequest): Promise<LoyaltyTransaction> {
-    return this.client.post(`/shops/${shopId}/loyalty/adjust-points`, data);
+  async adjustPoints(data: AdjustPointsRequest): Promise<LoyaltyTransaction> {
+    return this.client.post(this.getShopPath('/loyalty/adjust-points'), data);
   }
 
   /**
    * Redeem points
    */
-  async redeemPoints(shopId: string, data: RedeemPointsRequest): Promise<LoyaltyTransaction> {
-    return this.client.post(`/shops/${shopId}/loyalty/redeem-points`, data);
+  async redeemPoints(data: RedeemPointsRequest): Promise<LoyaltyTransaction> {
+    return this.client.post(this.getShopPath('/loyalty/redeem-points'), data);
   }
 
   /**
    * Calculate points for order
    */
-  async calculateOrderPoints(shopId: string, orderId: string): Promise<{
+  async calculateOrderPoints(orderId: string): Promise<{
     points: number;
     breakdown: {
       base_points: number;
@@ -112,23 +112,23 @@ export class LoyaltyResource extends BaseResource {
       promotion_bonus?: number;
     };
   }> {
-    return this.client.get(`/shops/${shopId}/orders/${orderId}/calculate-points`);
+    return this.client.get(this.getShopPath(`/orders/${orderId}/calculate-points`));
   }
 
   /**
    * Get loyalty program analytics
    */
-  async getAnalytics(shopId: string, params: {
+  async getAnalytics(params: {
     from_date: string;
     to_date: string;
   }): Promise<LoyaltyAnalytics> {
-    return this.client.get(`/shops/${shopId}/loyalty/analytics`, params);
+    return this.client.get(this.getShopPath('/loyalty/analytics'), params);
   }
 
   /**
    * Get expiring points notifications
    */
-  async getExpiringPoints(shopId: string, params?: {
+  async getExpiringPoints(params?: {
     days_threshold?: number;
     min_points?: number;
   }): Promise<{
@@ -138,6 +138,6 @@ export class LoyaltyResource extends BaseResource {
       expiry_date: string;
     }[];
   }> {
-    return this.client.get(`/shops/${shopId}/loyalty/expiring-points`, params);
+    return this.client.get(this.getShopPath('/loyalty/expiring-points'), params);
   }
 }

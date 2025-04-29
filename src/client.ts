@@ -53,9 +53,11 @@ export class PancakeClient implements IHttpClient {
   public readonly settings: SettingsResource;
   private apiKey: string;
   private baseUrl: string;
+  public shopId?: string;
 
-  constructor(apiKey: string) {
+  constructor(apiKey: string, shopId?: string) {
     this.apiKey = apiKey;
+    this.shopId = shopId;
     this.baseUrl = "https://pos.pages.fm/api/v1";
     this.customers = new CustomerResource(this);
     this.orders = new OrderResource(this);

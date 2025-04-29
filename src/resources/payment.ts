@@ -16,29 +16,28 @@ export class PaymentResource extends BaseResource {
   /**
    * Get list of payment gateways
    */
-  async listGateways(shopId: string): Promise<{
+  async listGateways(): Promise<{
     data: PaymentGateway[];
   }> {
-    return this.client.get(`/shops/${shopId}/payment/gateways`);
+    return this.client.get(this.getShopPath('/payment/gateways'));
   }
 
   /**
    * Get gateway by code
    */
-  async getGateway(shopId: string, code: string): Promise<PaymentGateway> {
-    return this.client.get(`/shops/${shopId}/payment/gateways/${code}`);
+  async getGateway(code: string): Promise<PaymentGateway> {
+    return this.client.get(this.getShopPath(`/payment/gateways/${code}`));
   }
 
   /**
    * Update gateway settings
    */
   async updateGatewaySettings(
-    shopId: string,
     code: string,
     settings: Partial<PaymentGateway['settings']>
   ): Promise<PaymentGateway> {
     return this.client.put(
-      `/shops/${shopId}/payment/gateways/${code}/settings`,
+      this.getShopPath(`/payment/gateways/${code}/settings`),
       settings
     );
   }
@@ -46,39 +45,38 @@ export class PaymentResource extends BaseResource {
   /**
    * Get list of payment methods
    */
-  async listMethods(shopId: string, params?: {
+  async listMethods(params?: {
     gateway_code?: string;
     currency?: string;
     is_active?: boolean;
   }): Promise<{
     data: PaymentMethod[];
   }> {
-    return this.client.get(`/shops/${shopId}/payment/methods`, params);
+    return this.client.get(this.getShopPath('/payment/methods'), params);
   }
 
   /**
    * Create payment transaction
    */
   async createPayment(
-    shopId: string,
     data: CreatePaymentRequest
   ): Promise<PaymentResponse> {
-    return this.client.post(`/shops/${shopId}/payment/transactions`, data);
+    return this.client.post(this.getShopPath('/payment/transactions'), data);
   }
 
   /**
    * Get transaction by ID
    */
-  async getTransaction(shopId: string, transactionId: string): Promise<PaymentTransaction> {
+  async getTransaction(transactionId: string): Promise<PaymentTransaction> {
     return this.client.get(
-      `/shops/${shopId}/payment/transactions/${transactionId}`
+      this.getShopPath(`/payment/transactions/${transactionId}`)
     );
   }
 
   /**
    * List transactions
    */
-  async listTransactions(shopId: string, params?: {
+  async listTransactions(params?: {
     page_size?: number;
     page_number?: number;
     gateway_code?: string;
@@ -89,15 +87,15 @@ export class PaymentResource extends BaseResource {
   }): Promise<{
     data: PaymentTransaction[];
   }> {
-    return this.client.get(`/shops/${shopId}/payment/transactions`, params);
+    return this.client.get(this.getShopPath('/payment/transactions'), params);
   }
 
   /**
    * Refund transaction
    */
-  async refund(shopId: string, data: RefundRequest): Promise<PaymentTransaction> {
+  async refund(data: RefundRequest): Promise<PaymentTransaction> {
     return this.client.post(
-      `/shops/${shopId}/payment/transactions/${data.transaction_id}/refund`,
+      this.getShopPath(`/payment/transactions/${data.transaction_id}/refund`),
       data
     );
   }
@@ -106,12 +104,11 @@ export class PaymentResource extends BaseResource {
    * Cancel transaction
    */
   async cancel(
-    shopId: string,
     transactionId: string,
     reason?: string
   ): Promise<PaymentTransaction> {
     return this.client.post(
-      `/shops/${shopId}/payment/transactions/${transactionId}/cancel`,
+      this.getShopPath(`/payment/transactions/${transactionId}/cancel`),
       { reason }
     );
   }
@@ -119,25 +116,24 @@ export class PaymentResource extends BaseResource {
   /**
    * Get payment analytics
    */
-  async getAnalytics(shopId: string, params?: {
+  async getAnalytics(params?: {
     from_date?: string;
     to_date?: string;
     gateway_code?: string;
   }): Promise<PaymentAnalytics> {
-    return this.client.get(`/shops/${shopId}/payment/analytics`, params);
+    return this.client.get(this.getShopPath('/payment/analytics'), params);
   }
 
   /**
    * Handle webhook event
    */
   async handleWebhook(
-    shopId: string,
     gatewayCode: string,
     data: Record<string, any>,
     signature?: string
   ): Promise<PaymentWebhookEvent> {
     return this.client.post(
-      `/shops/${shopId}/payment/gateways/${gatewayCode}/webhook`,
+      this.getShopPath(`/payment/gateways/${gatewayCode}/webhook`),
       data,
       {
         headers: signature ? { 'X-Webhook-Signature': signature } : undefined
@@ -148,7 +144,7 @@ export class PaymentResource extends BaseResource {
   /**
    * Get installment plans
    */
-  async getInstallmentPlans(shopId: string, params: {
+  async getInstallmentPlans(params: {
     amount: number;
     gateway_code?: string;
     bank_code?: string;
@@ -156,7 +152,7 @@ export class PaymentResource extends BaseResource {
     data: InstallmentPlan[];
   }> {
     return this.client.get(
-      `/shops/${shopId}/payment/installment-plans`,
+      this.getShopPath('/payment/installment-plans'),
       params
     );
   }
@@ -165,11 +161,10 @@ export class PaymentResource extends BaseResource {
    * Get bank transfer info
    */
   async getBankTransferInfo(
-    shopId: string,
     transactionId: string
   ): Promise<BankTransferInfo> {
     return this.client.get(
-      `/shops/${shopId}/payment/transactions/${transactionId}/bank-transfer-info`
+      this.getShopPath(`/payment/transactions/${transactionId}/bank-transfer-info`)
     );
   }
 
@@ -177,7 +172,6 @@ export class PaymentResource extends BaseResource {
    * Verify bank transfer
    */
   async verifyBankTransfer(
-    shopId: string,
     transactionId: string,
     data: {
       transfer_proof?: string;
@@ -187,7 +181,7 @@ export class PaymentResource extends BaseResource {
     }
   ): Promise<PaymentTransaction> {
     return this.client.post(
-      `/shops/${shopId}/payment/transactions/${transactionId}/verify-transfer`,
+      this.getShopPath(`/payment/transactions/${transactionId}/verify-transfer`),
       data
     );
   }
@@ -196,7 +190,6 @@ export class PaymentResource extends BaseResource {
    * Get payment QR code
    */
   async getPaymentQR(
-    shopId: string,
     transactionId: string,
     params?: {
       format?: 'svg' | 'png';
@@ -207,7 +200,7 @@ export class PaymentResource extends BaseResource {
     expires_at: string;
   }> {
     return this.client.get(
-      `/shops/${shopId}/payment/transactions/${transactionId}/qr-code`,
+      this.getShopPath(`/payment/transactions/${transactionId}/qr-code`),
       params
     );
   }

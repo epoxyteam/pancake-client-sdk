@@ -17,112 +17,111 @@ export class CRMResource extends BaseResource {
   /**
    * Get list of CRM tables
    */
-  async listTables(shopId: string): Promise<{ data: CRMTable[] }> {
-    return this.client.get(`/shops/${shopId}/crm/tables`);
+  async listTables(): Promise<{ data: CRMTable[] }> {
+    return this.client.get(this.getShopPath('/crm/tables'));
   }
 
   /**
    * Get table by ID
    */
-  async getTable(shopId: string, tableId: string): Promise<CRMTable> {
-    return this.client.get(`/shops/${shopId}/crm/tables/${tableId}`);
+  async getTable(tableId: string): Promise<CRMTable> {
+    return this.client.get(this.getShopPath(`/crm/tables/${tableId}`));
   }
 
   /**
    * Create new table
    */
-  async createTable(shopId: string, data: CreateTableRequest): Promise<CRMTable> {
-    return this.client.post(`/shops/${shopId}/crm/tables`, data);
+  async createTable(data: CreateTableRequest): Promise<CRMTable> {
+    return this.client.post(this.getShopPath('/crm/tables'), data);
   }
 
   /**
    * Update table
    */
-  async updateTable(shopId: string, tableId: string, data: UpdateTableRequest): Promise<CRMTable> {
-    return this.client.put(`/shops/${shopId}/crm/tables/${tableId}`, data);
+  async updateTable(tableId: string, data: UpdateTableRequest): Promise<CRMTable> {
+    return this.client.put(this.getShopPath(`/crm/tables/${tableId}`), data);
   }
 
   /**
    * Delete table
    */
-  async deleteTable(shopId: string, tableId: string): Promise<void> {
-    return this.client.delete(`/shops/${shopId}/crm/tables/${tableId}`);
+  async deleteTable(tableId: string): Promise<void> {
+    return this.client.delete(this.getShopPath(`/crm/tables/${tableId}`));
   }
 
   /**
    * Get list of records in a table
    */
-  async listRecords(shopId: string, tableId: string, params?: CRMListParams): Promise<{ 
+  async listRecords(tableId: string, params?: CRMListParams): Promise<{
     data: CRMRecord[];
     total: number;
   }> {
-    return this.client.get(`/shops/${shopId}/crm/tables/${tableId}/records`, params);
+    return this.client.get(this.getShopPath(`/crm/tables/${tableId}/records`), params);
   }
 
   /**
    * Get record by ID
    */
-  async getRecord(shopId: string, tableId: string, recordId: string): Promise<CRMRecord> {
-    return this.client.get(`/shops/${shopId}/crm/tables/${tableId}/records/${recordId}`);
+  async getRecord(tableId: string, recordId: string): Promise<CRMRecord> {
+    return this.client.get(this.getShopPath(`/crm/tables/${tableId}/records/${recordId}`));
   }
 
   /**
    * Create new record
    */
-  async createRecord(shopId: string, tableId: string, data: CreateRecordRequest): Promise<CRMRecord> {
-    return this.client.post(`/shops/${shopId}/crm/tables/${tableId}/records`, data);
+  async createRecord(tableId: string, data: CreateRecordRequest): Promise<CRMRecord> {
+    return this.client.post(this.getShopPath(`/crm/tables/${tableId}/records`), data);
   }
 
   /**
    * Update record
    */
-  async updateRecord(shopId: string, tableId: string, recordId: string, data: UpdateRecordRequest): Promise<CRMRecord> {
-    return this.client.put(`/shops/${shopId}/crm/tables/${tableId}/records/${recordId}`, data);
+  async updateRecord(tableId: string, recordId: string, data: UpdateRecordRequest): Promise<CRMRecord> {
+    return this.client.put(this.getShopPath(`/crm/tables/${tableId}/records/${recordId}`), data);
   }
 
   /**
    * Delete record
    */
-  async deleteRecord(shopId: string, tableId: string, recordId: string): Promise<void> {
-    return this.client.delete(`/shops/${shopId}/crm/tables/${tableId}/records/${recordId}`);
+  async deleteRecord(tableId: string, recordId: string): Promise<void> {
+    return this.client.delete(this.getShopPath(`/crm/tables/${tableId}/records/${recordId}`));
   }
 
   /**
    * Get list of CRM profiles
    */
-  async listProfiles(shopId: string): Promise<{ data: CRMProfile[] }> {
-    return this.client.get(`/shops/${shopId}/crm/profiles`);
+  async listProfiles(): Promise<{ data: CRMProfile[] }> {
+    return this.client.get(this.getShopPath('/crm/profiles'));
   }
 
   /**
    * Get record history
    */
-  async getRecordHistory(shopId: string, tableId: string, recordId: string): Promise<{ 
-    data: CRMRecordHistory[] 
+  async getRecordHistory(tableId: string, recordId: string): Promise<{
+    data: CRMRecordHistory[]
   }> {
-    return this.client.get(`/shops/${shopId}/crm/tables/${tableId}/records/${recordId}/history`);
+    return this.client.get(this.getShopPath(`/crm/tables/${tableId}/records/${recordId}/history`));
   }
 
   /**
    * Get record comments
    */
-  async listComments(shopId: string, tableId: string, recordId: string): Promise<{
+  async listComments(tableId: string, recordId: string): Promise<{
     data: CRMRecordComment[]
   }> {
-    return this.client.get(`/shops/${shopId}/crm/tables/${tableId}/records/${recordId}/comments`);
+    return this.client.get(this.getShopPath(`/crm/tables/${tableId}/records/${recordId}/comments`));
   }
 
   /**
    * Add comment to record
    */
   async createComment(
-    shopId: string,
     tableId: string,
     recordId: string,
     data: CreateCommentRequest
   ): Promise<CRMRecordComment> {
     return this.client.post(
-      `/shops/${shopId}/crm/tables/${tableId}/records/${recordId}/comments`,
+      this.getShopPath(`/crm/tables/${tableId}/records/${recordId}/comments`),
       data
     );
   }
@@ -131,13 +130,12 @@ export class CRMResource extends BaseResource {
    * Delete comment
    */
   async deleteComment(
-    shopId: string,
     tableId: string,
     recordId: string,
     commentId: string
   ): Promise<void> {
     return this.client.delete(
-      `/shops/${shopId}/crm/tables/${tableId}/records/${recordId}/comments/${commentId}`
+      this.getShopPath(`/crm/tables/${tableId}/records/${recordId}/comments/${commentId}`)
     );
   }
 }

@@ -5,42 +5,42 @@ export class CustomerResource extends BaseResource {
   /**
    * Get list of customers
    */
-  async list(shopId: string, params?: CustomerListParams): Promise<{ data: Customer[] }> {
-    return this.client.get(`/shops/${shopId}/customers`, params);
+  async list(params?: CustomerListParams): Promise<{ data: Customer[] }> {
+    return this.client.get(this.getShopPath('/customers'), params);
   }
 
   /**
    * Get customer by ID
    */
-  async getById(shopId: string, customerId: string): Promise<Customer> {
-    return this.client.get(`/shops/${shopId}/customers/${customerId}`);
+  async getById(customerId: string): Promise<Customer> {
+    return this.client.get(this.getShopPath(`/customers/${customerId}`));
   }
 
   /**
    * Create new customer
    */
-  async create(shopId: string, data: CreateCustomerRequest): Promise<Customer> {
-    return this.client.post(`/shops/${shopId}/customers`, data);
+  async create(data: CreateCustomerRequest): Promise<Customer> {
+    return this.client.post(this.getShopPath('/customers'), data);
   }
 
   /**
    * Update customer
    */
-  async update(shopId: string, customerId: string, data: Partial<Customer>): Promise<Customer> {
-    return this.client.put(`/shops/${shopId}/customers/${customerId}`, data);
+  async update(customerId: string, data: Partial<Customer>): Promise<Customer> {
+    return this.client.put(this.getShopPath(`/customers/${customerId}`), data);
   }
 
   /**
    * Add customer address
    */
-  async addAddress(shopId: string, customerId: string, address: CustomerAddress): Promise<CustomerAddress> {
-    return this.client.post(`/shops/${shopId}/customers/${customerId}/addresses`, address);
+  async addAddress(customerId: string, address: CustomerAddress): Promise<CustomerAddress> {
+    return this.client.post(this.getShopPath(`/customers/${customerId}/addresses`), address);
   }
 
   /**
    * Get customer reward points history
    */
-  async getRewardHistory(shopId: string, customerId: string): Promise<any> {
-    return this.client.get(`/shops/${shopId}/customers/${customerId}/reward-points`);
+  async getRewardHistory(customerId: string): Promise<any> {
+    return this.client.get(this.getShopPath(`/customers/${customerId}/reward-points`));
   }
 }

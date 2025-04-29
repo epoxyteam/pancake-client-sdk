@@ -16,23 +16,23 @@ export class MediaResource extends BaseResource {
   /**
    * Get list of media files
    */
-  async list(shopId: string, params?: MediaListParams): Promise<{
+  async list(params?: MediaListParams): Promise<{
     data: Media[];
   }> {
-    return this.client.get(`/shops/${shopId}/media`, params);
+    return this.client.get(this.getShopPath('/media'), params);
   }
 
   /**
    * Get media by ID
    */
-  async getById(shopId: string, mediaId: string): Promise<Media> {
-    return this.client.get(`/shops/${shopId}/media/${mediaId}`);
+  async getById(mediaId: string): Promise<Media> {
+    return this.client.get(this.getShopPath(`/media/${mediaId}`));
   }
 
   /**
    * Upload file
    */
-  async upload(shopId: string, data: UploadRequest): Promise<Media> {
+  async upload(data: UploadRequest): Promise<Media> {
     const formData = new FormData();
     formData.append('file', data.file);
     
@@ -52,38 +52,37 @@ export class MediaResource extends BaseResource {
       formData.append('content_type', data.content_type);
     }
 
-    return this.client.post(`/shops/${shopId}/media/upload`, formData);
+    return this.client.post(this.getShopPath('/media/upload'), formData);
   }
 
   /**
    * Delete media
    */
-  async delete(shopId: string, mediaId: string): Promise<void> {
-    return this.client.delete(`/shops/${shopId}/media/${mediaId}`);
+  async delete(mediaId: string): Promise<void> {
+    return this.client.delete(this.getShopPath(`/media/${mediaId}`));
   }
 
   /**
    * Update media
    */
-  async update(shopId: string, mediaId: string, data: {
+  async update(mediaId: string, data: {
     name?: string;
     folder_id?: string;
     tags?: string[];
     metadata?: Record<string, any>;
   }): Promise<Media> {
-    return this.client.put(`/shops/${shopId}/media/${mediaId}`, data);
+    return this.client.put(this.getShopPath(`/media/${mediaId}`), data);
   }
 
   /**
    * Process image
    */
   async processImage(
-    shopId: string,
     mediaId: string,
     options: ImageProcessingOptions
   ): Promise<Media> {
     return this.client.post(
-      `/shops/${shopId}/media/${mediaId}/process`,
+      this.getShopPath(`/media/${mediaId}/process`),
       options
     );
   }
@@ -91,33 +90,32 @@ export class MediaResource extends BaseResource {
   /**
    * List folders
    */
-  async listFolders(shopId: string): Promise<{ data: MediaFolder[] }> {
-    return this.client.get(`/shops/${shopId}/media/folders`);
+  async listFolders(): Promise<{ data: MediaFolder[] }> {
+    return this.client.get(this.getShopPath('/media/folders'));
   }
 
   /**
    * Create folder
    */
-  async createFolder(shopId: string, data: CreateFolderRequest): Promise<MediaFolder> {
-    return this.client.post(`/shops/${shopId}/media/folders`, data);
+  async createFolder(data: CreateFolderRequest): Promise<MediaFolder> {
+    return this.client.post(this.getShopPath('/media/folders'), data);
   }
 
   /**
    * Update folder
    */
   async updateFolder(
-    shopId: string,
     folderId: string,
     data: { name: string }
   ): Promise<MediaFolder> {
-    return this.client.put(`/shops/${shopId}/media/folders/${folderId}`, data);
+    return this.client.put(this.getShopPath(`/media/folders/${folderId}`), data);
   }
 
   /**
    * Delete folder
    */
-  async deleteFolder(shopId: string, folderId: string, recursive?: boolean): Promise<void> {
-    return this.client.delete(`/shops/${shopId}/media/folders/${folderId}`, {
+  async deleteFolder(folderId: string, recursive?: boolean): Promise<void> {
+    return this.client.delete(this.getShopPath(`/media/folders/${folderId}`), {
       recursive
     });
   }
@@ -125,24 +123,23 @@ export class MediaResource extends BaseResource {
   /**
    * Get media statistics
    */
-  async getStats(shopId: string): Promise<MediaStats> {
-    return this.client.get(`/shops/${shopId}/media/stats`);
+  async getStats(): Promise<MediaStats> {
+    return this.client.get(this.getShopPath('/media/stats'));
   }
 
   /**
    * Bulk operation on media files
    */
   async bulkOperation(
-    shopId: string,
     operation: BulkMediaOperation
   ): Promise<BulkOperationResult> {
-    return this.client.post(`/shops/${shopId}/media/bulk`, operation);
+    return this.client.post(this.getShopPath('/media/bulk'), operation);
   }
 
   /**
    * Get upload URL for direct upload
    */
-  async getUploadUrl(shopId: string, data: {
+  async getUploadUrl(data: {
     filename: string;
     content_type: string;
     size: number;
@@ -151,21 +148,20 @@ export class MediaResource extends BaseResource {
     expires_at: string;
     fields?: Record<string, string>;
   }> {
-    return this.client.post(`/shops/${shopId}/media/get-upload-url`, data);
+    return this.client.post(this.getShopPath('/media/get-upload-url'), data);
   }
 
   /**
    * Scan media for viruses/malware
    */
-  async scanMedia(shopId: string, mediaId: string): Promise<MediaScanResult> {
-    return this.client.post(`/shops/${shopId}/media/${mediaId}/scan`, {});
+  async scanMedia(mediaId: string): Promise<MediaScanResult> {
+    return this.client.post(this.getShopPath(`/media/${mediaId}/scan`), {});
   }
 
   /**
    * Generate thumbnail
    */
   async generateThumbnail(
-    shopId: string,
     mediaId: string,
     options?: {
       width?: number;
@@ -174,7 +170,7 @@ export class MediaResource extends BaseResource {
     }
   ): Promise<Media> {
     return this.client.post(
-      `/shops/${shopId}/media/${mediaId}/thumbnail`,
+      this.getShopPath(`/media/${mediaId}/thumbnail`),
       options || {}
     );
   }
@@ -183,7 +179,6 @@ export class MediaResource extends BaseResource {
    * Get media download URL
    */
   async getDownloadUrl(
-    shopId: string,
     mediaId: string,
     options?: {
       expires_in?: number;
@@ -193,16 +188,16 @@ export class MediaResource extends BaseResource {
     download_url: string;
     expires_at: string;
   }> {
-    return this.client.get(`/shops/${shopId}/media/${mediaId}/download-url`, options);
+    return this.client.get(this.getShopPath(`/media/${mediaId}/download-url`), options);
   }
 
   /**
    * Search media
    */
-  async search(shopId: string, query: string, params?: Omit<MediaListParams, 'search'>): Promise<{
+  async search(query: string, params?: Omit<MediaListParams, 'search'>): Promise<{
     data: Media[];
   }> {
-    return this.client.get(`/shops/${shopId}/media/search`, {
+    return this.client.get(this.getShopPath('/media/search'), {
       ...params,
       query
     });

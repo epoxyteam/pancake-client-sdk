@@ -13,62 +13,62 @@ export class ReturnResource extends BaseResource {
   /**
    * Get list of order returns
    */
-  async list(shopId: string, params?: ReturnListParams): Promise<{
+  async list(params?: ReturnListParams): Promise<{
     data: OrderReturn[];
   }> {
-    return this.client.get(`/shops/${shopId}/orders-returned`, params);
+    return this.client.get(this.getShopPath('/orders-returned'), params);
   }
 
   /**
    * Get return by ID
    */
-  async getById(shopId: string, returnId: string): Promise<OrderReturn> {
-    return this.client.get(`/shops/${shopId}/orders-returned/${returnId}`);
+  async getById(returnId: string): Promise<OrderReturn> {
+    return this.client.get(this.getShopPath(`/orders-returned/${returnId}`));
   }
 
   /**
    * Create new return
    */
-  async create(shopId: string, data: CreateReturnRequest): Promise<OrderReturn> {
-    return this.client.post(`/shops/${shopId}/orders-returned`, data);
+  async create(data: CreateReturnRequest): Promise<OrderReturn> {
+    return this.client.post(this.getShopPath('/orders-returned'), data);
   }
 
   /**
    * Update return
    */
-  async update(shopId: string, returnId: string, data: UpdateReturnRequest): Promise<OrderReturn> {
-    return this.client.put(`/shops/${shopId}/orders-returned/${returnId}`, data);
+  async update(returnId: string, data: UpdateReturnRequest): Promise<OrderReturn> {
+    return this.client.put(this.getShopPath(`/orders-returned/${returnId}`), data);
   }
 
   /**
    * Cancel return
    */
-  async cancel(shopId: string, returnId: string, reason?: string): Promise<OrderReturn> {
-    return this.client.post(`/shops/${shopId}/orders-returned/${returnId}/cancel`, { reason });
+  async cancel(returnId: string, reason?: string): Promise<OrderReturn> {
+    return this.client.post(this.getShopPath(`/orders-returned/${returnId}/cancel`), { reason });
   }
 
   /**
    * Approve return
    */
-  async approve(shopId: string, returnId: string, data?: {
+  async approve(returnId: string, data?: {
     refund_method?: string;
     refund_amount?: number;
     note?: string;
   }): Promise<OrderReturn> {
-    return this.client.post(`/shops/${shopId}/orders-returned/${returnId}/approve`, data || {});
+    return this.client.post(this.getShopPath(`/orders-returned/${returnId}/approve`), data || {});
   }
 
   /**
    * Reject return
    */
-  async reject(shopId: string, returnId: string, reason: string): Promise<OrderReturn> {
-    return this.client.post(`/shops/${shopId}/orders-returned/${returnId}/reject`, { reason });
+  async reject(returnId: string, reason: string): Promise<OrderReturn> {
+    return this.client.post(this.getShopPath(`/orders-returned/${returnId}/reject`), { reason });
   }
 
   /**
    * Complete return
    */
-  async complete(shopId: string, returnId: string, data?: {
+  async complete(returnId: string, data?: {
     note?: string;
     received_items?: {
       product_id: string;
@@ -77,51 +77,51 @@ export class ReturnResource extends BaseResource {
       condition: string;
     }[];
   }): Promise<OrderReturn> {
-    return this.client.post(`/shops/${shopId}/orders-returned/${returnId}/complete`, data || {});
+    return this.client.post(this.getShopPath(`/orders-returned/${returnId}/complete`), data || {});
   }
 
   /**
    * Get return statistics
    */
-  async getStats(shopId: string, params?: {
+  async getStats(params?: {
     from_date?: string;
     to_date?: string;
   }): Promise<ReturnSummary> {
-    return this.client.get(`/shops/${shopId}/orders-returned/stats`, params);
+    return this.client.get(this.getShopPath('/orders-returned/stats'), params);
   }
 
   /**
    * Get returns by order
    */
-  async getByOrder(shopId: string, orderId: string): Promise<{
+  async getByOrder(orderId: string): Promise<{
     data: OrderReturn[];
   }> {
-    return this.client.get(`/shops/${shopId}/orders/${orderId}/returns`);
+    return this.client.get(this.getShopPath(`/orders/${orderId}/returns`));
   }
 
   /**
    * Generate return label
    */
-  async generateLabel(shopId: string, returnId: string, data: ReturnLabelRequest): Promise<ReturnLabel> {
-    return this.client.post(`/shops/${shopId}/orders-returned/${returnId}/label`, data);
+  async generateLabel(returnId: string, data: ReturnLabelRequest): Promise<ReturnLabel> {
+    return this.client.post(this.getShopPath(`/orders-returned/${returnId}/label`), data);
   }
 
   /**
    * Get return shipping rates
    */
-  async getShippingRates(shopId: string, returnId: string): Promise<{
+  async getShippingRates(returnId: string): Promise<{
     carrier: string;
     service: string;
     rate: number;
     estimated_days: number;
   }[]> {
-    return this.client.get(`/shops/${shopId}/orders-returned/${returnId}/shipping-rates`);
+    return this.client.get(this.getShopPath(`/orders-returned/${returnId}/shipping-rates`));
   }
 
   /**
    * Add note to return
    */
-  async addNote(shopId: string, returnId: string, note: string): Promise<{
+  async addNote(returnId: string, note: string): Promise<{
     id: string;
     note: string;
     created_by: {
@@ -130,13 +130,13 @@ export class ReturnResource extends BaseResource {
     };
     created_at: string;
   }> {
-    return this.client.post(`/shops/${shopId}/orders-returned/${returnId}/notes`, { note });
+    return this.client.post(this.getShopPath(`/orders-returned/${returnId}/notes`), { note });
   }
 
   /**
    * Get return notes
    */
-  async getNotes(shopId: string, returnId: string): Promise<{
+  async getNotes(returnId: string): Promise<{
     data: {
       id: string;
       note: string;
@@ -147,6 +147,6 @@ export class ReturnResource extends BaseResource {
       created_at: string;
     }[];
   }> {
-    return this.client.get(`/shops/${shopId}/orders-returned/${returnId}/notes`);
+    return this.client.get(this.getShopPath(`/orders-returned/${returnId}/notes`));
   }
 }

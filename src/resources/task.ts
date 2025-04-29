@@ -12,114 +12,114 @@ export class TaskResource extends BaseResource {
   /**
    * Get list of tasks
    */
-  async list(shopId: string, params?: TaskListParams): Promise<{ data: Task[] }> {
-    return this.client.get(`/shops/${shopId}/tasks`, params);
+  async list(params?: TaskListParams): Promise<{ data: Task[] }> {
+    return this.client.get(this.getShopPath('/tasks'), params);
   }
 
   /**
    * Get task by ID
    */
-  async getById(shopId: string, taskId: string): Promise<Task> {
-    return this.client.get(`/shops/${shopId}/tasks/${taskId}`);
+  async getById(taskId: string): Promise<Task> {
+    return this.client.get(this.getShopPath(`/tasks/${taskId}`));
   }
 
   /**
    * Create new task
    */
-  async create(shopId: string, data: CreateTaskRequest): Promise<Task> {
-    return this.client.post(`/shops/${shopId}/tasks`, data);
+  async create(data: CreateTaskRequest): Promise<Task> {
+    return this.client.post(this.getShopPath('/tasks'), data);
   }
 
   /**
    * Update task
    */
-  async update(shopId: string, taskId: string, data: UpdateTaskRequest): Promise<Task> {
-    return this.client.put(`/shops/${shopId}/tasks/${taskId}`, data);
+  async update(taskId: string, data: UpdateTaskRequest): Promise<Task> {
+    return this.client.put(this.getShopPath(`/tasks/${taskId}`), data);
   }
 
   /**
    * Delete task
    */
-  async delete(shopId: string, taskId: string): Promise<void> {
-    return this.client.delete(`/shops/${shopId}/tasks/${taskId}`);
+  async delete(taskId: string): Promise<void> {
+    return this.client.delete(this.getShopPath(`/tasks/${taskId}`));
   }
 
   /**
    * Complete task
    */
-  async complete(shopId: string, taskId: string, note?: string): Promise<Task> {
-    return this.client.post(`/shops/${shopId}/tasks/${taskId}/complete`, { note });
+  async complete(taskId: string, note?: string): Promise<Task> {
+    return this.client.post(this.getShopPath(`/tasks/${taskId}/complete`), { note });
   }
 
   /**
    * Cancel task
    */
-  async cancel(shopId: string, taskId: string, reason?: string): Promise<Task> {
-    return this.client.post(`/shops/${shopId}/tasks/${taskId}/cancel`, { reason });
+  async cancel(taskId: string, reason?: string): Promise<Task> {
+    return this.client.post(this.getShopPath(`/tasks/${taskId}/cancel`), { reason });
   }
 
   /**
    * Get task comments
    */
-  async listComments(shopId: string, taskId: string): Promise<{ data: TaskComment[] }> {
-    return this.client.get(`/shops/${shopId}/tasks/${taskId}/comments`);
+  async listComments(taskId: string): Promise<{ data: TaskComment[] }> {
+    return this.client.get(this.getShopPath(`/tasks/${taskId}/comments`));
   }
 
   /**
    * Add comment to task
    */
-  async addComment(shopId: string, taskId: string, data: {
+  async addComment(taskId: string, data: {
     content: string;
     attachments?: string[];
   }): Promise<TaskComment> {
-    return this.client.post(`/shops/${shopId}/tasks/${taskId}/comments`, data);
+    return this.client.post(this.getShopPath(`/tasks/${taskId}/comments`), data);
   }
 
   /**
    * Delete comment
    */
-  async deleteComment(shopId: string, taskId: string, commentId: string): Promise<void> {
-    return this.client.delete(`/shops/${shopId}/tasks/${taskId}/comments/${commentId}`);
+  async deleteComment(taskId: string, commentId: string): Promise<void> {
+    return this.client.delete(this.getShopPath(`/tasks/${taskId}/comments/${commentId}`));
   }
 
   /**
    * Get tasks statistics
    */
-  async getStats(shopId: string, params?: {
+  async getStats(params?: {
     assigned_to?: string;
     from_date?: string;
     to_date?: string;
   }): Promise<TaskStats> {
-    return this.client.get(`/shops/${shopId}/tasks/stats`, params);
+    return this.client.get(this.getShopPath('/tasks/stats'), params);
   }
 
   /**
    * Get tasks by customer
    */
-  async getCustomerTasks(shopId: string, customerId: string, params?: Omit<TaskListParams, 'related_id' | 'related_type'>): Promise<{
+  async getCustomerTasks(customerId: string, params?: Omit<TaskListParams, 'related_id' | 'related_type'>): Promise<{
     data: Task[];
   }> {
-    return this.client.get(`/shops/${shopId}/customers/${customerId}/tasks`, params);
+    return this.client.get(this.getShopPath(`/customers/${customerId}/tasks`), params);
   }
 
   /**
    * Get tasks by order
    */
-  async getOrderTasks(shopId: string, orderId: string, params?: Omit<TaskListParams, 'related_id' | 'related_type'>): Promise<{
+  async getOrderTasks(orderId: string, params?: Omit<TaskListParams, 'related_id' | 'related_type'>): Promise<{
     data: Task[];
   }> {
-    return this.client.get(`/shops/${shopId}/orders/${orderId}/tasks`, params);
+    return this.client.get(this.getShopPath(`/orders/${orderId}/tasks`), params);
   }
 
   /**
    * Bulk update task status
    */
-  async bulkUpdateStatus(shopId: string, taskIds: string[], status: Task['status'], note?: string): Promise<{
+  async bulkUpdateStatus(taskIds: string[], status: Task['status'], note?: string): Promise<{
     success_count: number;
     failed_count: number;
     errors?: Record<string, string>;
   }> {
-    return this.client.post(`/shops/${shopId}/tasks/bulk-update-status`, {
+    return this.client.post(this.getShopPath('/tasks/bulk-update-status'), {
       task_ids: taskIds,
       status,
       note
@@ -129,12 +129,12 @@ export class TaskResource extends BaseResource {
   /**
    * Bulk assign tasks
    */
-  async bulkAssign(shopId: string, taskIds: string[], assigneeId: string): Promise<{
+  async bulkAssign(taskIds: string[], assigneeId: string): Promise<{
     success_count: number;
     failed_count: number;
     errors?: Record<string, string>;
   }> {
-    return this.client.post(`/shops/${shopId}/tasks/bulk-assign`, {
+    return this.client.post(this.getShopPath('/tasks/bulk-assign'), {
       task_ids: taskIds,
       assignee_id: assigneeId
     });

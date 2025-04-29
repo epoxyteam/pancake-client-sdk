@@ -5,49 +5,49 @@ export class OrderResource extends BaseResource {
   /**
    * Get list of orders
    */
-  async list(shopId: string, params?: OrderListParams): Promise<{ data: Order[] }> {
-    return this.client.get(`/shops/${shopId}/orders`, params);
+  async list(params?: OrderListParams): Promise<{ data: Order[] }> {
+    return this.client.get(this.getShopPath('/orders'), params);
   }
 
   /**
    * Get order by ID
    */
-  async getById(shopId: string, orderId: string): Promise<Order> {
-    return this.client.get(`/shops/${shopId}/orders/${orderId}`);
+  async getById(orderId: string): Promise<Order> {
+    return this.client.get(this.getShopPath(`/orders/${orderId}`));
   }
 
   /**
    * Create new order
    */
-  async create(shopId: string, data: CreateOrderRequest): Promise<Order> {
-    return this.client.post(`/shops/${shopId}/orders`, data);
+  async create(data: CreateOrderRequest): Promise<Order> {
+    return this.client.post(this.getShopPath('/orders'), data);
   }
 
   /**
    * Update order
    */
-  async update(shopId: string, orderId: string, data: Partial<Order>): Promise<Order> {
-    return this.client.put(`/shops/${shopId}/orders/${orderId}`, data);
+  async update(orderId: string, data: Partial<Order>): Promise<Order> {
+    return this.client.put(this.getShopPath(`/orders/${orderId}`), data);
   }
 
   /**
    * Get order print URL
    */
-  async getPrintUrl(shopId: string, orderId: string): Promise<{ url: string }> {
-    return this.client.get(`/shops/${shopId}/orders/${orderId}/print`);
+  async getPrintUrl(orderId: string): Promise<{ url: string }> {
+    return this.client.get(this.getShopPath(`/orders/${orderId}/print`));
   }
 
   /**
    * Get order confirmation URL
    */
-  async getConfirmationUrl(shopId: string, orderId: string): Promise<{ url: string }> {
-    return this.client.get(`/shops/${shopId}/orders/${orderId}/confirmation`);
+  async getConfirmationUrl(orderId: string): Promise<{ url: string }> {
+    return this.client.get(this.getShopPath(`/orders/${orderId}/confirmation`));
   }
 
   /**
    * Get order advanced promotions
    */
-  async getAdvancedPromotions(shopId: string, orderId: string): Promise<any> {
-    return this.client.get(`/shops/${shopId}/orders/${orderId}/promotions/advanced`);
+  async getAdvancedPromotions(orderId: string): Promise<any> {
+    return this.client.get(this.getShopPath(`/orders/${orderId}/promotions/advanced`));
   }
 }

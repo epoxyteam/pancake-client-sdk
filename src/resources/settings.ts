@@ -16,19 +16,18 @@ export class SettingsResource extends BaseResource {
   /**
    * Get shop settings
    */
-  async getShopSettings(shopId: string): Promise<ShopSettings> {
-    return this.client.get(`/shops/${shopId}/settings`);
+  async getShopSettings(): Promise<ShopSettings> {
+    return this.client.get(this.getShopPath('/settings'));
   }
 
   /**
    * Update general settings
    */
   async updateGeneralSettings(
-    shopId: string,
     settings: Partial<GeneralSettings>
   ): Promise<ShopSettings> {
     return this.client.put(
-      `/shops/${shopId}/settings/general`,
+      this.getShopPath('/settings/general'),
       settings
     );
   }
@@ -37,11 +36,10 @@ export class SettingsResource extends BaseResource {
    * Update POS settings
    */
   async updatePOSSettings(
-    shopId: string,
     settings: Partial<POSSettings>
   ): Promise<ShopSettings> {
     return this.client.put(
-      `/shops/${shopId}/settings/pos`,
+      this.getShopPath('/settings/pos'),
       settings
     );
   }
@@ -50,11 +48,10 @@ export class SettingsResource extends BaseResource {
    * Update invoice settings
    */
   async updateInvoiceSettings(
-    shopId: string,
     settings: Partial<InvoiceSettings>
   ): Promise<ShopSettings> {
     return this.client.put(
-      `/shops/${shopId}/settings/invoice`,
+      this.getShopPath('/settings/invoice'),
       settings
     );
   }
@@ -63,11 +60,10 @@ export class SettingsResource extends BaseResource {
    * Update notification settings
    */
   async updateNotificationSettings(
-    shopId: string,
     settings: Partial<NotificationSettings>
   ): Promise<ShopSettings> {
     return this.client.put(
-      `/shops/${shopId}/settings/notifications`,
+      this.getShopPath('/settings/notifications'),
       settings
     );
   }
@@ -76,11 +72,10 @@ export class SettingsResource extends BaseResource {
    * Update display settings
    */
   async updateDisplaySettings(
-    shopId: string,
     settings: Partial<DisplaySettings>
   ): Promise<ShopSettings> {
     return this.client.put(
-      `/shops/${shopId}/settings/display`,
+      this.getShopPath('/settings/display'),
       settings
     );
   }
@@ -89,11 +84,10 @@ export class SettingsResource extends BaseResource {
    * Update automation settings
    */
   async updateAutomationSettings(
-    shopId: string,
     settings: Partial<AutomationSettings>
   ): Promise<ShopSettings> {
     return this.client.put(
-      `/shops/${shopId}/settings/automation`,
+      this.getShopPath('/settings/automation'),
       settings
     );
   }
@@ -102,11 +96,10 @@ export class SettingsResource extends BaseResource {
    * Update social settings
    */
   async updateSocialSettings(
-    shopId: string,
     settings: Partial<SocialSettings>
   ): Promise<ShopSettings> {
     return this.client.put(
-      `/shops/${shopId}/settings/social`,
+      this.getShopPath('/settings/social'),
       settings
     );
   }
@@ -115,11 +108,10 @@ export class SettingsResource extends BaseResource {
    * Update advanced settings
    */
   async updateAdvancedSettings(
-    shopId: string,
     settings: Partial<AdvancedSettings>
   ): Promise<ShopSettings> {
     return this.client.put(
-      `/shops/${shopId}/settings/advanced`,
+      this.getShopPath('/settings/advanced'),
       settings
     );
   }
@@ -127,9 +119,9 @@ export class SettingsResource extends BaseResource {
   /**
    * Get user preferences
    */
-  async getUserPreferences(shopId: string, userId: string): Promise<UserPreferences> {
+  async getUserPreferences(userId: string): Promise<UserPreferences> {
     return this.client.get(
-      `/shops/${shopId}/users/${userId}/preferences`
+      this.getShopPath(`/users/${userId}/preferences`)
     );
   }
 
@@ -137,12 +129,11 @@ export class SettingsResource extends BaseResource {
    * Update user preferences
    */
   async updateUserPreferences(
-    shopId: string,
     userId: string,
     preferences: Partial<UserPreferences>
   ): Promise<UserPreferences> {
     return this.client.put(
-      `/shops/${shopId}/users/${userId}/preferences`,
+      this.getShopPath(`/users/${userId}/preferences`),
       preferences
     );
   }
@@ -151,11 +142,10 @@ export class SettingsResource extends BaseResource {
    * Reset settings to default
    */
   async resetToDefault(
-    shopId: string,
     section?: string
   ): Promise<ShopSettings> {
     return this.client.post(
-      `/shops/${shopId}/settings/reset`,
+      this.getShopPath('/settings/reset'),
       { section }
     );
   }
@@ -164,11 +154,10 @@ export class SettingsResource extends BaseResource {
    * Import settings
    */
   async importSettings(
-    shopId: string,
     settings: Record<string, any>
   ): Promise<ShopSettings> {
     return this.client.post(
-      `/shops/${shopId}/settings/import`,
+      this.getShopPath('/settings/import'),
       settings
     );
   }
@@ -177,11 +166,10 @@ export class SettingsResource extends BaseResource {
    * Export settings
    */
   async exportSettings(
-    shopId: string,
     sections?: string[]
   ): Promise<Record<string, any>> {
     return this.client.get(
-      `/shops/${shopId}/settings/export`,
+      this.getShopPath('/settings/export'),
       { sections }
     );
   }
@@ -190,7 +178,6 @@ export class SettingsResource extends BaseResource {
    * Validate settings
    */
   async validateSettings(
-    shopId: string,
     settings: Partial<ShopSettings>
   ): Promise<{
     is_valid: boolean;
@@ -200,7 +187,7 @@ export class SettingsResource extends BaseResource {
     }[];
   }> {
     return this.client.post(
-      `/shops/${shopId}/settings/validate`,
+      this.getShopPath('/settings/validate'),
       settings
     );
   }
@@ -208,7 +195,7 @@ export class SettingsResource extends BaseResource {
   /**
    * Get audit log
    */
-  async getAuditLog(shopId: string, params?: {
+  async getAuditLog(params?: {
     page_size?: number;
     page_number?: number;
     from_date?: string;
@@ -224,7 +211,7 @@ export class SettingsResource extends BaseResource {
     }[];
   }> {
     return this.client.get(
-      `/shops/${shopId}/settings/audit-log`,
+      this.getShopPath('/settings/audit-log'),
       params
     );
   }

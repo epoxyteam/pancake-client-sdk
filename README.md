@@ -15,12 +15,12 @@ yarn add @pancakepos/client
 ```typescript
 import { PancakeClient } from '@pancakepos/client';
 
-// Initialize the client
-const client = new PancakeClient('your-api-key');
+// Initialize the client with shop ID
+const client = new PancakeClient('your-api-key', 'your-shop-id');
 
 // Example: Get list of orders
 const getOrders = async () => {
-  const orders = await client.orders.list('shop-id', {
+  const orders = await client.orders.list({
     page_size: 10,
     page_number: 1
   });
@@ -29,7 +29,7 @@ const getOrders = async () => {
 
 // Example: Create a product
 const createProduct = async () => {
-  const product = await client.products.create('shop-id', {
+  const product = await client.products.create({
     name: 'Test Product',
     price: 100,
     description: 'A test product'
@@ -66,7 +66,7 @@ The SDK throws typed errors that you can catch and handle:
 
 ```typescript
 try {
-  const order = await client.orders.getById('shop-id', 'order-id');
+  const order = await client.orders.getById('order-id');
 } catch (error) {
   if (error.status === 404) {
     console.log('Order not found');
@@ -82,16 +82,16 @@ try {
 
 ```typescript
 // List orders
-const orders = await client.orders.list('shop-id', {
+const orders = await client.orders.list({
   status: 'pending',
   from_date: '2025-01-01'
 });
 
 // Get order details
-const order = await client.orders.getById('shop-id', 'order-id');
+const order = await client.orders.getById('order-id');
 
 // Create order
-const newOrder = await client.orders.create('shop-id', {
+const newOrder = await client.orders.create({
   customer_id: 'customer-id',
   items: [{
     product_id: 'product-id',
@@ -104,16 +104,16 @@ const newOrder = await client.orders.create('shop-id', {
 
 ```typescript
 // List products
-const products = await client.products.list('shop-id');
+const products = await client.products.list();
 
 // Create product
-const product = await client.products.create('shop-id', {
+const product = await client.products.create({
   name: 'New Product',
   price: 100
 });
 
 // Update product
-await client.products.update('shop-id', 'product-id', {
+await client.products.update('product-id', {
   price: 120
 });
 ```
@@ -122,13 +122,13 @@ await client.products.update('shop-id', 'product-id', {
 
 ```typescript
 // List customers
-const customers = await client.customers.list('shop-id');
+const customers = await client.customers.list();
 
 // Get customer details
-const customer = await client.customers.getById('shop-id', 'customer-id');
+const customer = await client.customers.getById('customer-id');
 
 // Create customer
-const newCustomer = await client.customers.create('shop-id', {
+const newCustomer = await client.customers.create({
   name: 'John Doe',
   email: 'john@example.com'
 });
@@ -140,20 +140,20 @@ const newCustomer = await client.customers.create('shop-id', {
 
 ```typescript
 // Connect marketplace account
-const account = await client.marketplace.connect('shop-id', {
+const account = await client.marketplace.connect({
   platform: 'shopee',
   auth_code: 'auth-code'
 });
 
 // Sync orders
-await client.marketplace.startSync('shop-id', account.id, 'orders');
+await client.marketplace.startSync(account.id, 'orders');
 ```
 
 ### Payment Processing
 
 ```typescript
 // Create payment
-const payment = await client.payments.createPayment('shop-id', {
+const payment = await client.payments.createPayment({
   order_id: 'order-id',
   amount: 100,
   currency: 'USD',
@@ -165,13 +165,13 @@ const payment = await client.payments.createPayment('shop-id', {
 
 ```typescript
 // Upload file
-const media = await client.media.upload('shop-id', {
+const media = await client.media.upload({
   file: fileBlob,
   folder_id: 'folder-id'
 });
 
 // Process image
-await client.media.processImage('shop-id', media.id, {
+await client.media.processImage(media.id, {
   width: 800,
   height: 600,
   format: 'webp'

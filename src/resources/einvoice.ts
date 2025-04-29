@@ -12,133 +12,133 @@ export class EInvoiceResource extends BaseResource {
   /**
    * Get list of invoices
    */
-  async list(shopId: string, params?: InvoiceListParams): Promise<{
+  async list(params?: InvoiceListParams): Promise<{
     data: EInvoice[];
   }> {
-    return this.client.get(`/shops/${shopId}/einvoices`, params);
+    return this.client.get(this.getShopPath('/einvoices'), params);
   }
 
   /**
    * Get invoice by ID
    */
-  async getById(shopId: string, invoiceId: string): Promise<EInvoice> {
-    return this.client.get(`/shops/${shopId}/einvoices/${invoiceId}`);
+  async getById(invoiceId: string): Promise<EInvoice> {
+    return this.client.get(this.getShopPath(`/einvoices/${invoiceId}`));
   }
 
   /**
    * Create new invoice
    */
-  async create(shopId: string, data: CreateInvoiceRequest): Promise<EInvoice> {
-    return this.client.post(`/shops/${shopId}/einvoices`, data);
+  async create(data: CreateInvoiceRequest): Promise<EInvoice> {
+    return this.client.post(this.getShopPath('/einvoices'), data);
   }
 
   /**
    * Update invoice
    */
-  async update(shopId: string, invoiceId: string, data: UpdateInvoiceRequest): Promise<EInvoice> {
-    return this.client.put(`/shops/${shopId}/einvoices/${invoiceId}`, data);
+  async update(invoiceId: string, data: UpdateInvoiceRequest): Promise<EInvoice> {
+    return this.client.put(this.getShopPath(`/einvoices/${invoiceId}`), data);
   }
 
   /**
    * Sign invoice
    */
-  async sign(shopId: string, invoiceId: string): Promise<EInvoice> {
-    return this.client.post(`/shops/${shopId}/einvoices/${invoiceId}/sign`, {});
+  async sign(invoiceId: string): Promise<EInvoice> {
+    return this.client.post(this.getShopPath(`/einvoices/${invoiceId}/sign`), {});
   }
 
   /**
    * Cancel invoice
    */
-  async cancel(shopId: string, invoiceId: string, reason: string): Promise<EInvoice> {
-    return this.client.post(`/shops/${shopId}/einvoices/${invoiceId}/cancel`, { reason });
+  async cancel(invoiceId: string, reason: string): Promise<EInvoice> {
+    return this.client.post(this.getShopPath(`/einvoices/${invoiceId}/cancel`), { reason });
   }
 
   /**
    * Send invoice to customer
    */
-  async send(shopId: string, invoiceId: string, data: {
+  async send(invoiceId: string, data: {
     email?: string;
     send_sms?: boolean;
     phone_number?: string;
   }): Promise<EInvoice> {
-    return this.client.post(`/shops/${shopId}/einvoices/${invoiceId}/send`, data);
+    return this.client.post(this.getShopPath(`/einvoices/${invoiceId}/send`), data);
   }
 
   /**
    * Get invoice PDF
    */
-  async getPDF(shopId: string, invoiceId: string, template?: string): Promise<{
+  async getPDF(invoiceId: string, template?: string): Promise<{
     download_url: string;
     expires_at: string;
   }> {
-    return this.client.get(`/shops/${shopId}/einvoices/${invoiceId}/pdf`, { template });
+    return this.client.get(this.getShopPath(`/einvoices/${invoiceId}/pdf`), { template });
   }
 
   /**
    * Get invoice XML
    */
-  async getXML(shopId: string, invoiceId: string): Promise<{
+  async getXML(invoiceId: string): Promise<{
     download_url: string;
     expires_at: string;
   }> {
-    return this.client.get(`/shops/${shopId}/einvoices/${invoiceId}/xml`);
+    return this.client.get(this.getShopPath(`/einvoices/${invoiceId}/xml`));
   }
 
   /**
    * List invoice templates
    */
-  async listTemplates(shopId: string): Promise<{
+  async listTemplates(): Promise<{
     data: InvoiceTemplate[];
   }> {
-    return this.client.get(`/shops/${shopId}/einvoice-templates`);
+    return this.client.get(this.getShopPath('/einvoice-templates'));
   }
 
   /**
    * Get invoice statistics
    */
-  async getStats(shopId: string, params?: {
+  async getStats(params?: {
     from_date?: string;
     to_date?: string;
   }): Promise<InvoiceStats> {
-    return this.client.get(`/shops/${shopId}/einvoices/stats`, params);
+    return this.client.get(this.getShopPath('/einvoices/stats'), params);
   }
 
   /**
    * Get invoices by order
    */
-  async getByOrder(shopId: string, orderId: string): Promise<{
+  async getByOrder(orderId: string): Promise<{
     data: EInvoice[];
   }> {
-    return this.client.get(`/shops/${shopId}/orders/${orderId}/einvoices`);
+    return this.client.get(this.getShopPath(`/orders/${orderId}/einvoices`));
   }
 
   /**
    * Validate invoice data
    */
-  async validate(shopId: string, data: CreateInvoiceRequest): Promise<{
+  async validate(data: CreateInvoiceRequest): Promise<{
     is_valid: boolean;
     errors?: {
       field: string;
       message: string;
     }[];
   }> {
-    return this.client.post(`/shops/${shopId}/einvoices/validate`, data);
+    return this.client.post(this.getShopPath('/einvoices/validate'), data);
   }
 
   /**
    * Get invoice numbering sequence
    */
-  async getNextNumber(shopId: string, series: string): Promise<{
+  async getNextNumber(series: string): Promise<{
     next_number: string;
     series: string;
   }> {
-    return this.client.get(`/shops/${shopId}/einvoices/next-number`, { series });
+    return this.client.get(this.getShopPath('/einvoices/next-number'), { series });
   }
 
   /**
    * Get invoice settings
    */
-  async getSettings(shopId: string): Promise<{
+  async getSettings(): Promise<{
     auto_create: boolean;
     default_template_id: string;
     series_format: string;
@@ -146,13 +146,13 @@ export class EInvoiceResource extends BaseResource {
     company_name: string;
     company_address: string;
   }> {
-    return this.client.get(`/shops/${shopId}/einvoice-settings`);
+    return this.client.get(this.getShopPath('/einvoice-settings'));
   }
 
   /**
    * Update invoice settings
    */
-  async updateSettings(shopId: string, settings: {
+  async updateSettings(settings: {
     auto_create?: boolean;
     default_template_id?: string;
     series_format?: string;
@@ -167,6 +167,6 @@ export class EInvoiceResource extends BaseResource {
     company_name: string;
     company_address: string;
   }> {
-    return this.client.put(`/shops/${shopId}/einvoice-settings`, settings);
+    return this.client.put(this.getShopPath('/einvoice-settings'), settings);
   }
 }
