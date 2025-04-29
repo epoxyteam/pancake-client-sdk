@@ -5,15 +5,15 @@ Official TypeScript SDK for the Pancake POS API. This SDK provides a simple and 
 ## Installation
 
 ```bash
-npm install @pancakepos/client
+npm install pancake-client-sdk
 # or
-yarn add @pancakepos/client
+yarn add pancake-client-sdk
 ```
 
 ## Quick Start
 
 ```typescript
-import { PancakeClient } from '@pancakepos/client';
+import { PancakeClient } from 'pancake-client-sdk';
 
 // Initialize the client with shop ID
 const client = new PancakeClient('your-api-key', 'your-shop-id');
@@ -180,7 +180,31 @@ await client.media.processImage(media.id, {
 
 ## Documentation
 
-For detailed documentation, visit [https://docs.pancakepos.com](https://docs.pancakepos.com)
+### Local Development Documentation
+
+Để chạy documentation trên môi trường local:
+
+```bash
+# Cài đặt dependencies
+npm install
+
+# Chạy documentation server
+npm run docs:dev
+```
+
+Documentation server sẽ chạy tại http://localhost:5173
+
+### Cấu Trúc Documentation
+
+- `/docs/guide/` - Hướng dẫn sử dụng cơ bản
+- `/docs/api/` - Chi tiết API reference
+- `/docs/examples/` - Các ví dụ tích hợp
+
+Để build documentation cho production:
+
+```bash
+npm run docs:build
+```
 
 ## License
 
